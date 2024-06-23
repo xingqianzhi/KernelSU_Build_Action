@@ -32,7 +32,7 @@ jobs:
         cd $GITHUB_WORKSPACE/kali-nethunter-project/nethunter-installer/devices/fourteen/alioth-los-ksu/
         rm Image.gz-dtb
         rm dtbo.img
-        cd $GITHUB_WORKSPACEkali-nethunter-project/nethunter-installer
+        cd $GITHUB_WORKSPACE/kali-nethunter-project/nethunter-installer
         cp -fp $GITHUB_WORKSPACE/Image.gz-dtb devices/fourteen/alioth-los-ksu/
         cp -fp $GITHUB_WORKSPACE/dtbo.img devices/fourteen/alioth-los-ksu/
 

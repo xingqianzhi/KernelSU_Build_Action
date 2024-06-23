@@ -14,7 +14,7 @@ on:
       KERNEL_DEFCONFIG:
         description: 'Defconfig'
         required: true
-        default: 'alioth_nethunter_defconfig'
+        default: 'new_alioth_nethunter_defconfig.txt'
       TARGET_ARCH:
         description: 'Target ARCH'
         required: true

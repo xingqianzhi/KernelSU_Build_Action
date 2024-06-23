@@ -23,7 +23,7 @@ on:
       KERNEL_FILE:
         description: 'Your kernel out image name'
         required: true
-        default: 'Image.gz'
+        default: 'Image.gz-dtb'
       CLANG_URL:
         description: 'Clang URL'
         required: true

@@ -21,23 +21,35 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y python3 python3-pip
 
-    - name: Clone and Build Nethunter Project
+    - name: Clone Nethunter Project
       run: |
-        cd $GITHUB_WORKSPACE/
+        cd $GITHUB_WORKSPACE
+        wget https://github.com/xingqianzhi/alioth_kernel/releases/download/202406232122/dtbo.img
+        wget https://github.com/xingqianzhi/alioth_kernel/releases/download/202406232122/Image.gz-dtb
         git clone https://gitlab.com/kalilinux/nethunter/build-scripts/kali-nethunter-project.git
-        cd $GITHUB_WORKSPACE/kali-nethunter-project/nethunter-installer
+        cd kali-nethunter-project/nethunter-installer
         ./bootstrap.sh
+        cp -fp $GITHUB_WORKSPACE/Image.gz-dtb devices/fourteen/alioth-los-ksu/
+        cp -fp $GITHUB_WORKSPACE/dtbo.img devices/fourteen/alioth-los-ksu/
+
+    - name: Build Nethunter rootfs and kernel install zip
+      run: |
+        cd kali-nethunter-project/nethunter-installer
         ./build.py -d alioth-los-ksu --rootfs full --fourteen
+
+    - name: Build Nethunter kernel install zip
+      run: |
+        cd kali-nethunter-project/nethunter-installer
         ./build.py -d alioth-los-ksu --fourteen --kernel
 
-    - name: Upload kernel artifact
+    - name: Upload Kernel Artifact for Nethunter
       uses: actions/upload-artifact@v2
       with:
-        name: kernel-nethunter
+        name: kernel-nethunter-alioth-los-ksu-fourteen-${{ env.BUILD_TIME }}
         path: kali-nethunter-project/nethunter-installer/kernel-nethunter-*-alioth-los-ksu-fourteen.zip
 
-    - name: Upload rootfs artifact
+    - name: Upload Rootfs Artifact for Nethunter
       uses: actions/upload-artifact@v2
       with:
-        name: rootfs-nethunter
+        name: nethunter-alioth-los-ksu-fourteen-kalifs-full-${{ env.BUILD_TIME }}
         path: kali-nethunter-project/nethunter-installer/nethunter-*-alioth-los-ksu-fourteen-kalifs-full.zip

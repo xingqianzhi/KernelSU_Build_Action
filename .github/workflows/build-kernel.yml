@@ -196,3 +196,30 @@ jobs:
       with:
         name: AnyKernel3${{ env.UPLOADNAME }}-${{ env.DEVICE }}-${{ env.BUILD_TIME }}
         path: AnyKernel3/*
+        
+    - name: Clone Nethunter Project
+      run: |
+        cd $GITHUB_WORKSPACE
+        git clone https://gitlab.com/kalilinux/nethunter/build-scripts/kali-nethunter-project.git
+        cd kali-nethunter-project/nethunter-installer
+        ./bootstrap.sh
+        cp -fp $GITHUB_WORKSPACE/android-kernel/arch/arm64/boot/Image.gz-dtb devices/fourteen/alioth-los-ksu/
+        cp -fp $GITHUB_WORKSPACE/android-kernel/out/arch/${{ github.event.inputs.TARGET_ARCH }}/boot/dtbo.img devices/fourteen/alioth-los-ksu/
+
+    - name: build Nethunter rootfs and kernel install zip
+        ./build.py -d alioth-los-ksu --rootfs full --fourteen
+
+    - name: build Nethunter kernel install zip
+        ./build.py -d alioth-los-ksu --fourteen --kernel
+
+    - name: Upload Kernel Artifact for Nethunter
+      uses: actions/upload-artifact@v2
+      with:
+        name: kernel-nethunter-alioth-los-ksu-fourteen-${{ env.BUILD_TIME }}
+        path: kali-nethunter-project/nethunter-installer/kernel-nethunter-*-alioth-los-ksu-fourteen.zip
+
+    - name: Upload Rootfs Artifact for Nethunter
+      uses: actions/upload-artifact@v2
+      with:
+        name: nethunter-alioth-los-ksu-fourteen-kalifs-full-${{ env.BUILD_TIME }}
+        path: kali-nethunter-project/nethunter-installer/nethunter-*-alioth-los-ksu-fourteen-kalifs-full.zip

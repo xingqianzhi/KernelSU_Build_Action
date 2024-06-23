@@ -1,4 +1,4 @@
-name: Build Kernel and Nethunter Project
+name: Build Kernel
 
 on:
   workflow_dispatch:
